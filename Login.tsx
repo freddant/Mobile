@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button, Alert } from 'react-native';
+import { StyleSheet, TextInput, View, Button, Alert, Image  } from 'react-native';
 
 
 
@@ -20,6 +20,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../assets/Logo.png')} style={styles.logo}/>
       <TextInput
         style={styles.input}
         onChangeText={setName}
@@ -53,5 +54,11 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10
+  },
+  logo: {
+    position: 'relative',
+    bottom: 50, 
+    width: 100, 
+    height: 100,
   },
 });
