@@ -6,7 +6,7 @@ export default function Home({navigation}) {
   return (
    <View>
     <Text>Home</Text>
-    <Text>Bem Vindes</Text>
+    <Text>Bem vindo gafanhoto</Text>
     <Button
         title="Me aperta"
         onPress={() => navigation.navigate('Login')}
