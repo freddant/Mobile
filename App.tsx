@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './pages/Home';
+import Produto from './pages/Produto';
 
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="Home" component={Home}/>
+          <Stack.Screen name="Produto" component={Produto}/>
         </Stack.Navigator>
       </NavigationContainer>
     );
