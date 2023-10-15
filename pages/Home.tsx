@@ -7,19 +7,32 @@ import { ListItemTitle } from '@rneui/base/dist/ListItem/ListItem.Title'
 import { ListItemContent } from '@rneui/base/dist/ListItem/ListItem.Content'
 import { ListItemSubtitle } from '@rneui/base/dist/ListItem/ListItem.Subtitle'
 import axiosConfig from '../config/axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as SecureStore from 'expo-secure-store' 
 
 export default function Home({navigation}) {
   const [produto, setProdutos] = useState([])
+  const [nomeUser, setNomeUser] = useState('')
 
   useEffect(() => {
     axiosConfig.get('character').then((resposta)=>{
       setProdutos(resposta.data.results)
     })
+    AsyncStorage.getItem('user').then ((user)=>{
+      setNomeUser(user)
+    })
   },[])
+
+  async function sair(){
+    await SecureStore.deleteItemAsync('token')
+    await AsyncStorage.removeItem('user')
+    navigation.navigate('Login')
+  }
+
   return (
    <ScrollView>
     <Text>Home</Text>
-    <Text >Bem vindo gafanhoto</Text>
+    <Text >Bem vindo {nomeUser}!</Text>
     <Divider/>
     {
       produto.length <= 0 && (
@@ -47,6 +60,10 @@ export default function Home({navigation}) {
     <Button
         title="Me aperta"
         onPress={() => navigation.navigate('Login')}
+      />
+      <Button
+        title="Sair"
+        onPress={sair}
       />
    </ScrollView>
     );

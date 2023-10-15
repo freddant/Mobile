@@ -1,44 +1,85 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, TextInput, View, Button, Alert, Image  } from 'react-native';
+import { auth, db } from '../components/firebaseConfig';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore"; 
 
 
 
-export default function Login({navigation}) {
-  function checkPassword(psw, login) {
-    if ((psw == "1234") && (login == 'admin')){
-      Alert.alert('Login e senha corretos')
+function Login({navigation}) {
+  // function checkPassword(psw, login) {
+  //   if ((psw == "1234") && (login == 'admin')){
+  //     Alert.alert('Login e senha corretos')
+  //     navigation.navigate('Home')
+  //   }
+  //   else{
+  //     Alert.alert('Login e senha incorretos')
+  //   }
+  //   setName('')
+  //   setNumber('')
+  //   }
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(async userCredentials => {
+      const user = userCredentials.user;
+      console.log(user.email);
+      // redirecionar pra pagina de registro
+      try {
+        const docRef = await addDoc(collection(db, "studiogames"), {
+          first: "hhhh",
+          middle: "gggg",
+          last: "bbbb",
+          born: 1111
+        });
+      
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    })
+    .catch(error => alert(error.message))
+  }
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+      console.log('logado com', user.email);
       navigation.navigate('Home')
-    }
-    else{
-      Alert.alert('Login e senha incorretos')
-    }
-    setName('')
-    setNumber('')
-    }
-  const [name, setName] = React.useState('');
-  const [number, setNumber] = React.useState('');
+    })
+    .catch(error => alert(error.message))
+  }
 
   return (
     <View style={styles.container}>
       <Image source={require('../assets/Logo.png')} style={styles.logo}/>
       <TextInput
         style={styles.input}
-        onChangeText={setName}
-        value={name}
+        onChangeText={setEmail}
+        value={email}
         placeholder="Digite seu login"
       />
       <TextInput
         style={styles.input}
-        value={number}
+        value={password}
         placeholder="Digite sua senha"
         secureTextEntry={true}
-        onChangeText={setNumber}
+        onChangeText={setPassword}
       />
       <Button
-        title="Aperte se tiver coragem"
-        onPress={() => checkPassword(number, name)}
+        title="Registrar"
+        onPress={handleSignUp}
       />
+      
+      <Button
+        title="Logar"
+        onPress={handleLogin}
+      />
+
       <StatusBar style="auto" />
       </View>
     );
@@ -63,3 +104,5 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+
+export default Login
